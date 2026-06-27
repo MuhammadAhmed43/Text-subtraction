@@ -70,7 +70,7 @@ vlm_prompt: |
      - Next of Kin: Next of Kin Name, Next of Kin Relationship, Next of Kin Contact Number (Extract these as 3 separate fields!)
      - Contact & Address: Primary Contact Number, Mobile Network, Secondary Contact Number, Email, Mailing Address, Permanent Address, Employer Address
      - Services & Checkboxes: Statement Frequency, E-Statement, Physical Statement, Cheque Book Leaves, ATM/Debit Card Scheme, SMS Language
-     - If ANY other field is filled, extract it too.
+     - CATCH-ALL MANDATE: You are FORBIDDEN from ignoring any filled key-value pair just because it is not in the list above. You MUST scour the entire document for ANY custom, secondary, or miscellaneous fields that have a handwritten/ticked value. If a field exists on the page and has data, it is a FATAL ERROR to omit it. Extract absolutely everything.
      - DO NOT GUESS OR INVENT DATA. If a field is blank, skip it. If it is filled, you are FORBIDDEN from skipping it.
 
   4. DO NOT MERGE ADJACENT LABELS: If two labels appear side by side (e.g. "Name of Fund Provider" | "Relationship with Fund Provider"), extract them separately if they have separate values.

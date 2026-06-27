@@ -1,0 +1,74 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+.Python
+pip-wheel-metadata/
+*.whl
+
+# Sample/test PDF files (large data files)
+*.pdf
+
+*.pyo
+*.pyd
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+.Python
+pip-wheel-metadata/
+*.whl
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Project outputs & working files (too large for git)
+data/
+work/
+logs/
+csv_exports/
+
+# Model cache / weights (can be huge)
+*.onnx
+*.pt
+*.pth
+*.bin
+*.safetensors
+*.h5
+*.pkl
+
+# PaddleOCR inference models
+inference/
+
+# Temp files
+*.tmp
+*.bak
+*.log
+
+# Config secrets
+.env
+*.env

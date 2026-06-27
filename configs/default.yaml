@@ -1,0 +1,76 @@
+# Default OCR Pipeline Configuration
+render:
+  dpi: 350
+  image_format: png
+
+preprocess:
+  enable_deskew: true
+  enable_denoise: true
+  variants:
+    - original
+    - gray
+    - contrast
+    - binarized
+
+ocr:
+  engines:
+    - paddleocr
+    - tesseract
+    - trocr_handwritten
+    - qwen_vl
+  # TrOCR model for handwritten text
+  trocr_model: "microsoft/trocr-base-handwritten"
+  # Qwen VLM model - uses Ollama
+  vlm_model: "qwen2.5vl:3b"
+  # PaddleOCR language
+  paddle_lang: "en"  # use 'en' for mixed scripts
+  # Tesseract language
+  tesseract_lang: "eng"
+
+validation:
+  accept_threshold: 0.75
+  uncertain_threshold: 0.55
+  rerun_threshold: 0.70
+  max_retries: 2
+
+outputs:
+  save_evidence_crops: true
+  save_raw_model_outputs: true
+
+vlm_prompt: |
+  You are an expert Document Information Extraction model specialising in bank and financial account opening forms.
+  Extract every piece of filled data from this scanned form image. Labels may be in English, Urdu, or mixed languages.
+  Values may be handwritten, typed, or indicated by checkboxes/tick marks.
+
+  Return STRICT JSON — an array of objects, each with these exact fields:
+  - "field_name": the English translation of the printed label/heading (e.g. "Account Title", "Date of Birth", "CNIC No", "Branch")
+  - "value": ONLY the customer-filled data for that field — never the field name itself, never the document/product name
+  - "page": 1
+  - "confidence": 0.0 to 1.0
+  - "uncertainty_reason": brief reason if confidence < 0.8, else null
+
+  CRITICAL RULES — follow every one:
+
+  1. FIELD NAME vs VALUE: The printed text on the form is the "field_name". The data the customer wrote/ticked is the "value".
+     - The document title printed at the top (e.g. "Account Opening Form", "Amal Women Account", "MCB Islamic") is NOT a field value.
+     - WRONG: {field_name: "Account Title", value: "Amal Women Account"}
+     - RIGHT:  {field_name: "Account Title", value: "Muhammad Shehzad Roy"} (the handwritten name below the Account Title label)
+
+  2. CHECKBOXES: Look for tick marks (✓), crosses (X), or filled circles. 
+     - Report ONLY the label next to the TICKED/MARKED option.
+     - BAD: {field_name: "Occupation", value: "[X] Salaried [] Business [] Student [] Unemployed"}
+     - GOOD: {field_name: "Occupation", value: "Salaried"}
+     - If no option is ticked, omit the field.
+
+  3. BE THOROUGH: Extract every field visible on the form that has a customer-filled value — names, dates, CNIC, phone, address, branch, occupation, gender, nationality, etc.
+
+  4. DO NOT MERGE ADJACENT LABELS: If two labels appear side by side (e.g. "Name of Fund Provider" | "Relationship with Fund Provider"), extract them separately if they have separate values.
+
+  5. SIGNATURES: If a signature box has a signature, output: {field_name: "Applicant Signature", value: "Present"}.
+
+  6. TRANSLATE: Translate Urdu/other language labels to English for "field_name". Keep values as written.
+
+  7. NO HALLUCINATION: Only extract fields with a clearly visible, legible filled value. Skip blank fields.
+
+  8. Return ONLY the JSON array. No markdown, no explanations.
+

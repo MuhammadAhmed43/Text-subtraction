@@ -65,7 +65,7 @@ vlm_prompt: |
   3. EXHAUSTIVE, STRICT EXTRACTION: Scan the document top-to-bottom, left-to-right. 
      - Extract EVERY printed label that has a handwritten value, typed value, or ticked checkbox next to it.
      - Use the EXACT printed English label from the form as the "field_name". Do NOT map or rename fields (e.g., if the form says "Tracking ID", use "Tracking ID". Do not change it to "CNIC No").
-     - CRITICAL: If a printed label has NO value filled in (it is blank), DO NOT include it in your output. Skipping blank fields is required.
+     - CRITICAL: If a printed label has NO value filled in (it is completely blank), you MUST extract it and set its value exactly to "N/A". Do NOT skip blank fields.
      - CRITICAL: DO NOT INVENT DATA. Do not hallucinate names, occupations, or incomes that are not visibly written on the page.
 
   4. DO NOT MERGE ADJACENT LABELS: If two labels appear side by side (e.g. "Name of Fund Provider" | "Relationship with Fund Provider"), extract them separately if they have separate values.

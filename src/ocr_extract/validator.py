@@ -198,6 +198,9 @@ def compute_confidence(candidate: Dict[str, Any]) -> float:
         0.20 * validator_score +
         0.10 * crop_quality_score
     """
+    if candidate.get("value_normalized", "").strip().upper() in ("N/A", "NA"):
+        # Explicitly marked blank field by the VLM - accept it
+        return 0.85
     model_agreement = compute_model_agreement(candidate)
     ocr_confidence = candidate.get("value_confidence", 0.5)
     geometry = candidate.get("geometry_score", 0.0)

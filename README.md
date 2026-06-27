@@ -19,6 +19,27 @@
 
 ---
 
+## 🚀 Quickstart
+
+```bash
+# 1. Clone & Setup
+git clone https://github.com/MuhammadAhmed43/Text-subtraction.git
+cd Text-subtraction
+python -m venv venv
+venv\Scripts\activate   # Linux/Mac: source venv/bin/activate
+pip install -r requirements.txt
+
+# 2. Install External Engines
+# - Install Tesseract OCR (must be on PATH)
+# - Install Ollama (https://ollama.com) and pull the VLM:
+ollama pull qwen2.5vl:7b
+
+# 3. Run the Pipeline!
+python -m src.ocr_extract run
+```
+
+---
+
 ## 📋 Table of Contents
 
 - [Overview](#-overview)

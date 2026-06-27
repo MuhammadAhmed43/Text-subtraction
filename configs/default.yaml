@@ -62,11 +62,61 @@ vlm_prompt: |
      - GOOD: {field_name: "Occupation", value: "Salaried"}
      - If no option is ticked, omit the field.
 
-  3. EXHAUSTIVE, STRICT EXTRACTION: Scan the document top-to-bottom, left-to-right. 
-     - Extract EVERY printed label that has a handwritten value, typed value, or ticked checkbox next to it.
-     - Use the EXACT printed English label from the form as the "field_name". Do NOT map or rename fields (e.g., if the form says "Tracking ID", use "Tracking ID". Do not change it to "CNIC No").
-     - CRITICAL: If a printed label has NO value filled in (it is completely blank), you MUST extract it and set its value exactly to "N/A". Do NOT skip blank fields.
-     - CRITICAL: DO NOT INVENT DATA. Do not hallucinate names, occupations, or incomes that are not visibly written on the page.
+  3. EXHAUSTIVE CHECKLIST EVALUATION: You MUST evaluate every single field in the checklist below. 
+     - If the field is visibly filled in the image, extract its value.
+     - CRITICAL: If the field is blank, OR if it does not exist in the image, you MUST include it in your output with the value exactly set to "N/A".
+     - Do NOT hallucinate data. Do NOT map wrong fields (e.g., if you see "Tracking ID", do not pretend it is "CNIC No". Just mark "CNIC No" as "N/A").
+     
+     Checklist of fields to evaluate:
+     - Account Title
+     - Account Type (Current/Savings)
+     - Currency
+     - Branch
+     - Date
+     - Tracking ID
+     - CIF/Client No
+     - Product Name
+     - Applicant Name
+     - Father/Spouse's Name
+     - Mother's Name
+     - Nationality
+     - Gender
+     - Marital Status
+     - Religion
+     - Zakat Exempt
+     - Residency Status
+     - Place of Birth
+     - CNIC No
+     - Date of ID Issue
+     - Date of ID Expiry
+     - Date of Birth
+     - Occupation / Salaried / Business
+     - Designation
+     - Employer Name
+     - Monthly Income
+     - Expected Debit Turnover
+     - Expected Credit Turnover
+     - No. of Transactions
+     - Next of Kin Name
+     - Next of Kin Relationship
+     - Next of Kin Contact Number
+     - Primary Contact Number (Preferably Cell)
+     - Mobile Network (Optional)
+     - Secondary Contact Number
+     - Emergency Contact (Optional)
+     - Email Address
+     - Mailing Address
+     - Residential Address
+     - Statement Frequency
+     - E-Statement (through digital means)
+     - Physical (on specific request of customer)
+     - Cheque Book / Number of Leaves
+     - ATM/Debit Card
+     - Card Type
+     - Display Name
+     - SMS Language
+
+     - CATCH-ALL: If you spot ANY OTHER filled field on the document that is not in this checklist, you MUST extract it as well.
 
   4. DO NOT MERGE ADJACENT LABELS: If two labels appear side by side (e.g. "Name of Fund Provider" | "Relationship with Fund Provider"), extract them separately if they have separate values.
 

@@ -8,6 +8,10 @@ import logging
 import os
 import sys
 
+if sys.platform == "win32":
+    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stderr.reconfigure(encoding="utf-8")
+
 # Set these before ANY paddle or paddleocr imports happen anywhere in the pipeline
 os.environ["FLAGS_enable_pir_api"] = "0"
 os.environ["FLAGS_use_mkldnn"] = "0"

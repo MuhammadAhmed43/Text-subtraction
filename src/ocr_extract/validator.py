@@ -217,6 +217,13 @@ def compute_confidence(candidate: Dict[str, Any]) -> float:
 
     if candidate.get("vlm_only") and candidate.get("value_normalized", "").strip():
         vlm_confidence = float(candidate.get("vlm_confidence", 0.5) or 0.5)
+        # For long text fields (addresses, employers) that VLM extracts but OCR struggles to corroborate exactly, give a baseline boost
+        val_len = len(candidate.get("value_normalized", ""))
+        name_lower = candidate.get("field_name_normalized", "")
+        is_long_text_field = any(k in name_lower for k in ("address", "employer", "name", "designation", "transactions", "nationality"))
+        if is_long_text_field and val_len > 1:
+            vlm_confidence = max(vlm_confidence, 0.70)
+        
         # Allow high-confidence VLM extractions to be accepted (above 0.75)
         score = max(score, min(0.85, vlm_confidence))
     
@@ -321,6 +328,17 @@ def validate_candidates(
 
     # Sort by confidence descending
     validated.sort(key=lambda c: c.get("final_score", 0), reverse=True)
+
+    # Deduplicate by field_name_normalized, keeping the highest scoring candidate
+    deduplicated = []
+    seen = set()
+    for candidate in validated:
+        norm_name = candidate.get("field_name_normalized", "")
+        if norm_name not in seen:
+            seen.add(norm_name)
+            deduplicated.append(candidate)
+            
+    validated = deduplicated
 
     accepted = sum(1 for c in validated if c["status"] == "accepted")
     uncertain = sum(1 for c in validated if c["status"] == "uncertain")

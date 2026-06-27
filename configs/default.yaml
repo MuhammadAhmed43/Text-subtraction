@@ -62,10 +62,16 @@ vlm_prompt: |
      - GOOD: {field_name: "Occupation", value: "Salaried"}
      - If no option is ticked, omit the field.
 
-  3. EXHAUSTIVE EXTRACTION (STRICT): You MUST scan the document systematically from top to bottom, left to right. Extract ABSOLUTELY EVERY key-value pair where the customer has written a value, ticked a checkbox, or signed. 
-     - Do NOT restrict yourself to a predefined list. Whatever the structure of the PDF is, if there is a printed label and a filled value, it MUST be extracted.
-     - Look carefully for dense fields that are easily missed like "Permanent Address", "Mailing Address", "Monthly Income", "Source of Funds", "Next of Kin details", etc.
-     - DO NOT GUESS OR INVENT DATA. If a field is completely blank in the image, do not include it. But if it is filled, you are FORBIDDEN from skipping it.
+  3. BE EXHAUSTIVE: You MUST scan the document systematically from top to bottom, left to right. Look carefully for the following fields and extract EVERY SINGLE ONE that is filled. DO NOT merge fields together!
+     - Account Info: Account Title, Account Type (Current/Savings), Branch, Date, Product Name
+     - Personal Info: Applicant Name, Father/Husband Name, Mother's Maiden Name, Nationality, Gender, Marital Status, Religion, Zakat Status, Residency Status, Education
+     - IDs & Dates: CNIC No, Date of Issue, Date of Expiry, Date of Birth, Place of Birth
+     - Employment & Income: Occupation, Designation, Employer/Company Name, Monthly Income, Source of Funds
+     - Next of Kin: Next of Kin Name, Next of Kin Relationship, Next of Kin Contact Number (Extract these as 3 separate fields!)
+     - Contact & Address: Primary Contact Number, Mobile Network, Secondary Contact Number, Email, Mailing Address, Permanent Address, Employer Address
+     - Services & Checkboxes: Statement Frequency, E-Statement, Physical Statement, Cheque Book Leaves, ATM/Debit Card Scheme, SMS Language
+     - If ANY other field is filled, extract it too.
+     - DO NOT GUESS OR INVENT DATA. If a field is blank, skip it. If it is filled, you are FORBIDDEN from skipping it.
 
   4. DO NOT MERGE ADJACENT LABELS: If two labels appear side by side (e.g. "Name of Fund Provider" | "Relationship with Fund Provider"), extract them separately if they have separate values.
 

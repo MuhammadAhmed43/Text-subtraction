@@ -1,4 +1,4 @@
-<![CDATA[<div align="center">
+<div align="center">
 
 # 🔍 OCR Extraction Pipeline
 
@@ -764,4 +764,3 @@ This project is licensed under the MIT License. See [LICENSE](LICENSE) for detai
 Built with ❤️ using PaddleOCR · Tesseract · TrOCR · Qwen2.5-VL · PyMuPDF
 
 </div>
-]]>

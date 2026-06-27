@@ -62,7 +62,14 @@ vlm_prompt: |
      - GOOD: {field_name: "Occupation", value: "Salaried"}
      - If no option is ticked, omit the field.
 
-  3. BE THOROUGH: Extract every field visible on the form that has a customer-filled value — names, dates, CNIC, phone, address, branch, occupation, gender, nationality, etc.
+  3. BE THOROUGH: Extract every single field visible on the form that has a customer-filled value. You MUST NOT miss any of the following fields if they are present:
+     - Names: Account Title, Display Name, Father/Husband Name, Mother's Maiden Name, Spouse Name, Next of Kin, Employer/Company Name
+     - Personal Info: Nationality, Residency Status, Gender, Marital Status, Occupation, Designation, Religion, Zakat Status
+     - IDs & Dates: CNIC No, Date of Issue, Date of Expiry, Date of Birth
+     - Contact & Address: Primary Contact Number, Mobile Network, Email, Mailing Address, Permanent Address, Employer Address
+     - Account Info: Product Name / Account Type, Branch, Cheque Book Leaves, ATM/Debit Card Scheme, Statement Frequency
+     - Checkboxes: SMS Language, E-Statement, Physical Statement
+     Any other filled field must also be extracted.
 
   4. DO NOT MERGE ADJACENT LABELS: If two labels appear side by side (e.g. "Name of Fund Provider" | "Relationship with Fund Provider"), extract them separately if they have separate values.
 

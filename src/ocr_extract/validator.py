@@ -229,6 +229,10 @@ def compute_confidence(candidate: Dict[str, Any]) -> float:
         # Raise to acceptance level (0.82) since format match is strong evidence
         score = max(score, 0.82)
         
+    if candidate.get("ocr_corroborated"):
+        # The VLM extraction perfectly matched raw OCR text. This is strong evidence.
+        score = max(score, 0.75)  # Ensure it meets the acceptance threshold
+
     # Penalize non-VLM fields that have strange/garbage names
     if "qwen_vl" not in candidate.get("source_models", []):
         name = candidate.get("field_name_raw", "")

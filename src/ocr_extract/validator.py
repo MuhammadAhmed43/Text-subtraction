@@ -217,12 +217,21 @@ def compute_confidence(candidate: Dict[str, Any]) -> float:
 
     if candidate.get("vlm_only") and candidate.get("value_normalized", "").strip():
         vlm_confidence = float(candidate.get("vlm_confidence", 0.5) or 0.5)
-        # For long text fields (addresses, employers) that VLM extracts but OCR struggles to corroborate exactly, give a baseline boost
-        val_len = len(candidate.get("value_normalized", ""))
+        # Boost VLM-only text fields that OCR struggles to perfectly match:
+        # 1. Long text fields
+        # 2. Bilingual/Translated fields containing parentheses like "Daily (روزانہ)"
+        # 3. Text containing Urdu/Arabic characters
+        val_norm = candidate.get("value_normalized", "")
+        val_len = len(val_norm)
         name_lower = candidate.get("field_name_normalized", "")
-        is_long_text_field = any(k in name_lower for k in ("address", "employer", "name", "designation", "transactions", "nationality"))
-        if is_long_text_field and val_len > 1:
-            vlm_confidence = max(vlm_confidence, 0.70)
+        
+        is_long_text = any(k in name_lower for k in ("address", "employer", "name", "designation", "transactions", "nationality", "title", "branch", "occupation", "frequency", "kin"))
+        has_bilingual_format = "(" in val_norm and ")" in val_norm
+        has_urdu_chars = any('\u0600' <= c <= '\u06FF' for c in val_norm)
+        
+        if val_len > 1 and (is_long_text or has_bilingual_format or has_urdu_chars):
+            # Boost to 0.75 so they achieve 'accepted' status if they look like valid translated/Urdu extractions
+            vlm_confidence = max(vlm_confidence, 0.75)
         
         # Allow high-confidence VLM extractions to be accepted (above 0.75)
         score = max(score, min(0.85, vlm_confidence))

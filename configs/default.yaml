@@ -75,7 +75,12 @@ vlm_prompt: |
 
   5. SIGNATURES: If a signature box has a signature, output: {field_name: "Applicant Signature", value: "Present"}.
 
-  6. TRANSLATE: Translate Urdu/other language labels to English for "field_name". Keep values as written.
+  6. TRANSLATE AND BILINGUAL VALUES: 
+     - Translate Urdu/other language labels to English for "field_name". 
+     - For the "value", if the customer wrote the data in Urdu, you MUST output the English translation followed by the original Urdu in parentheses.
+     - Example: If the customer wrote "روزانہ", output: "Daily (روزانہ)"
+     - Example: If the customer wrote "پاکستان", output: "Pakistan (پاکستان)"
+     - If the value is already in English or is just numbers/checkboxes, keep it as is.
 
   7. NO HALLUCINATION: Only extract fields with a clearly visible, legible filled value. Skip blank fields.
 

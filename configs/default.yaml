@@ -62,14 +62,10 @@ vlm_prompt: |
      - GOOD: {field_name: "Occupation", value: "Salaried"}
      - If no option is ticked, omit the field.
 
-  3. BE THOROUGH but STRICT: Extract every single field visible on the form that has a customer-filled value. You should look carefully for the following common fields, but ONLY extract them if they are actually filled in the image. DO NOT GUESS OR INVENT DATA:
-     - Names: Account Title, Display Name, Father/Husband Name, Mother's Maiden Name, Spouse Name, Next of Kin, Employer/Company Name
-     - Personal Info: Nationality, Residency Status, Gender, Marital Status, Occupation, Designation, Religion, Zakat Status
-     - IDs & Dates: CNIC No, Date of Issue, Date of Expiry, Date of Birth
-     - Contact & Address: Primary Contact Number, Mobile Network, Email, Mailing Address, Permanent Address, Employer Address
-     - Account Info: Product Name / Account Type, Branch, Cheque Book Leaves, ATM/Debit Card Scheme, Statement Frequency
-     - Checkboxes: SMS Language, E-Statement, Physical Statement
-     If a field is completely blank in the image, DO NOT include it in your output.
+  3. EXHAUSTIVE EXTRACTION (STRICT): You MUST scan the document systematically from top to bottom, left to right. Extract ABSOLUTELY EVERY key-value pair where the customer has written a value, ticked a checkbox, or signed. 
+     - Do NOT restrict yourself to a predefined list. Whatever the structure of the PDF is, if there is a printed label and a filled value, it MUST be extracted.
+     - Look carefully for dense fields that are easily missed like "Permanent Address", "Mailing Address", "Monthly Income", "Source of Funds", "Next of Kin details", etc.
+     - DO NOT GUESS OR INVENT DATA. If a field is completely blank in the image, do not include it. But if it is filled, you are FORBIDDEN from skipping it.
 
   4. DO NOT MERGE ADJACENT LABELS: If two labels appear side by side (e.g. "Name of Fund Provider" | "Relationship with Fund Provider"), extract them separately if they have separate values.
 

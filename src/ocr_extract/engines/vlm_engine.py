@@ -225,9 +225,18 @@ def run_vlm_extraction(
         for field_data in parsed:
             if not isinstance(field_data, dict):
                 continue
+                
+            raw_val = field_data.get("value")
+            if raw_val is None:
+                str_val = "N/A"
+            else:
+                str_val = str(raw_val).strip()
+                if str_val.lower() in ("", "-", "none", "null", "n/a", "na", "blank"):
+                    str_val = "N/A"
+            
             field = {
                 "field_name": str(field_data.get("field_name", "unknown")),
-                "value": str(field_data.get("value", "")),
+                "value": str_val,
                 "page": page_number,
                 "confidence": float(field_data.get("confidence", 0.5)),
                 "uncertainty_reason": field_data.get("uncertainty_reason"),

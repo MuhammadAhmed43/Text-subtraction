@@ -62,16 +62,11 @@ vlm_prompt: |
      - GOOD: {field_name: "Occupation", value: "Salaried"}
      - If no option is ticked, omit the field.
 
-  3. BE EXHAUSTIVE: You MUST scan the document systematically from top to bottom, left to right. Look carefully for the following fields and extract EVERY SINGLE ONE that is filled. DO NOT merge fields together!
-     - Account Info: Account Title, Account Type (Current/Savings), Branch, Date, Product Name
-     - Personal Info: Applicant Name, Father/Husband Name, Mother's Maiden Name, Nationality, Gender, Marital Status, Religion, Zakat Status, Residency Status, Education
-     - IDs & Dates: CNIC No, Date of Issue, Date of Expiry, Date of Birth, Place of Birth
-     - Employment & Income: Occupation, Designation, Employer/Company Name, Monthly Income, Source of Funds
-     - Next of Kin: Next of Kin Name, Next of Kin Relationship, Next of Kin Contact Number (Extract these as 3 separate fields!)
-     - Contact & Address: Primary Contact Number, Mobile Network, Secondary Contact Number, Email, Mailing Address, Permanent Address, Employer Address
-     - Services & Checkboxes: Statement Frequency, E-Statement, Physical Statement, Cheque Book Leaves, ATM/Debit Card Scheme, SMS Language
-     - CATCH-ALL MANDATE: You are FORBIDDEN from ignoring any filled key-value pair just because it is not in the list above. You MUST scour the entire document for ANY custom, secondary, or miscellaneous fields that have a handwritten/ticked value. If a field exists on the page and has data, it is a FATAL ERROR to omit it. Extract absolutely everything.
-     - DO NOT GUESS OR INVENT DATA. If a field is blank, skip it. If it is filled, you are FORBIDDEN from skipping it.
+  3. EXHAUSTIVE, STRICT EXTRACTION: Scan the document top-to-bottom, left-to-right. 
+     - Extract EVERY printed label that has a handwritten value, typed value, or ticked checkbox next to it.
+     - Use the EXACT printed English label from the form as the "field_name". Do NOT map or rename fields (e.g., if the form says "Tracking ID", use "Tracking ID". Do not change it to "CNIC No").
+     - CRITICAL: If a printed label has NO value filled in (it is blank), DO NOT include it in your output. Skipping blank fields is required.
+     - CRITICAL: DO NOT INVENT DATA. Do not hallucinate names, occupations, or incomes that are not visibly written on the page.
 
   4. DO NOT MERGE ADJACENT LABELS: If two labels appear side by side (e.g. "Name of Fund Provider" | "Relationship with Fund Provider"), extract them separately if they have separate values.
 
@@ -80,11 +75,9 @@ vlm_prompt: |
   6. TRANSLATE AND BILINGUAL VALUES: 
      - Translate Urdu/other language labels to English for "field_name". 
      - For the "value", if the customer wrote the data in Urdu, you MUST output the English translation followed by the original Urdu in parentheses.
-     - Example: If the customer wrote "روزانہ", output: "Daily (روزانہ)"
-     - Example: If the customer wrote "پاکستان", output: "Pakistan (پاکستان)"
-     - If the value is already in English or is just numbers/checkboxes, keep it as is.
+     - Example: If the customer wrote "ہاں", output: "Yes (ہاں)"
+     - If the value is already in English or is just numbers/checkboxes, keep it exactly as written without translating.
 
   7. NO HALLUCINATION: Only extract fields with a clearly visible, legible filled value. Skip blank fields.
 
   8. Return ONLY the JSON array. No markdown, no explanations.
-

@@ -21,9 +21,9 @@ ocr:
   # TrOCR model for handwritten text
   trocr_model: "microsoft/trocr-base-handwritten"
   # Qwen VLM model - uses Ollama
-  vlm_model: "qwen2.5vl:3b"
+  vlm_model: "qwen2.5vl:7b"
   # PaddleOCR language
-  paddle_lang: "en"  # use 'en' for mixed scripts
+  paddle_lang: "ur"  # use 'ur' to support Urdu + English forms
   # Tesseract language
   tesseract_lang: "eng"
 
@@ -54,7 +54,7 @@ vlm_prompt: |
   1. FIELD NAME vs VALUE: The printed text on the form is the "field_name". The data the customer wrote/ticked is the "value".
      - The document title printed at the top (e.g. "Account Opening Form", "Amal Women Account", "MCB Islamic") is NOT a field value.
      - WRONG: {field_name: "Account Title", value: "Amal Women Account"}
-     - RIGHT:  {field_name: "Account Title", value: "Muhammad Shehzad Roy"} (the handwritten name below the Account Title label)
+     - RIGHT:  {field_name: "Account Title", value: "John Doe"} (the handwritten name below the Account Title label)
 
   2. CHECKBOXES: Look for tick marks (✓), crosses (X), or filled circles. 
      - Report ONLY the label next to the TICKED/MARKED option.
@@ -62,14 +62,14 @@ vlm_prompt: |
      - GOOD: {field_name: "Occupation", value: "Salaried"}
      - If no option is ticked, omit the field.
 
-  3. BE THOROUGH: Extract every single field visible on the form that has a customer-filled value. You MUST NOT miss any of the following fields if they are present:
+  3. BE THOROUGH but STRICT: Extract every single field visible on the form that has a customer-filled value. You should look carefully for the following common fields, but ONLY extract them if they are actually filled in the image. DO NOT GUESS OR INVENT DATA:
      - Names: Account Title, Display Name, Father/Husband Name, Mother's Maiden Name, Spouse Name, Next of Kin, Employer/Company Name
      - Personal Info: Nationality, Residency Status, Gender, Marital Status, Occupation, Designation, Religion, Zakat Status
      - IDs & Dates: CNIC No, Date of Issue, Date of Expiry, Date of Birth
      - Contact & Address: Primary Contact Number, Mobile Network, Email, Mailing Address, Permanent Address, Employer Address
      - Account Info: Product Name / Account Type, Branch, Cheque Book Leaves, ATM/Debit Card Scheme, Statement Frequency
      - Checkboxes: SMS Language, E-Statement, Physical Statement
-     Any other filled field must also be extracted.
+     If a field is completely blank in the image, DO NOT include it in your output.
 
   4. DO NOT MERGE ADJACENT LABELS: If two labels appear side by side (e.g. "Name of Fund Provider" | "Relationship with Fund Provider"), extract them separately if they have separate values.
 
